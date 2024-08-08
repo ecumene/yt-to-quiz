@@ -1,0 +1,52 @@
+services:
+  traefik:
+    image: traefik:v2.8
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/config:/etc/traefik:ro
+      - ./certs:/etc/certs:ro
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./package.json:/usr/src/app/package.json
+      - ./bun.lockb:/usr/src/app/bun.lockb
+      - ./src:/usr/src/app/src
+    environment:
+      - FRONTEND_HOST=${FRONTEND_HOST}
+      - NODE_ENV=development
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.tls=true
+      - traefik.http.routers.backend.entrypoints=https
+      - traefik.http.routers.backend.rule=Host(`api.yt-to-quiz.localhost`)
+      - traefik.http.services.backend.loadbalancer.server.port=3000
+
+  frontend:
+    image: oven/bun:1
+    working_dir: /usr/src/app/frontend
+    command: sh -c "bun install --frozen-lockfile && bun run dev --host"
+    environment:
+      - VITE_APP_API_HOST=${VITE_APP_API_HOST}
+    volumes:
+      - ./frontend/package.json:/usr/src/app/frontend/package.json
+      - ./frontend/bun.lockb:/usr/src/app/frontend/bun.lockb
+      - ./frontend/tailwind.config.js:/usr/src/app/frontend/tailwind.config.js
+      - ./frontend/vite.config.js:/usr/src/app/frontend/vite.config.js
+      - ./frontend/tsconfig.json:/usr/src/app/frontend/tsconfig.json
+      - ./frontend/index.html:/usr/src/app/frontend/index.html
+      - ./frontend/public:/usr/src/app/frontend/public
+      - ./frontend/src:/usr/src/app/frontend/src
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.tls=true
+      - traefik.http.routers.frontend.entrypoints=https
+      - traefik.http.routers.frontend.rule=Host(`yt-to-quiz.localhost`)
+      - traefik.http.services.frontend.loadbalancer.server.port=5173

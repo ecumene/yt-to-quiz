@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "module": "index.ts",
+  "type": "module",
+  "workspaces": [
+    "frontend/*"
+  ],
+  "scripts": {
+    "dev": "docker compose --env-file .env.dev up -d",
+    "dev-server": "bun run --watch ./src/* src/index.ts",
+    "prod": "bun run index.ts",
+    "frontend:dev": "cd frontend && bun run dev",
+    "frontend:build": "cd frontend && bun run build",
+    "frontend:install": "cd frontend && bun install -f --no-cache"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "serve-static-bun": "^0.5.3"
+  }
+}
