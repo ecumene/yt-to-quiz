@@ -7,8 +7,9 @@
   ],
   "scripts": {
     "dev": "docker compose --env-file .env.dev up -d",
-    "dev-server": "bun run --watch ./src/* src/index.ts",
+    "dev-server": "bun run --watch src/index.ts",
     "prod": "bun run index.ts",
+    "rebuild": "docker compose --env-file .env.dev up -d --build --force-recreate",
     "frontend:dev": "cd frontend && bun run dev",
     "frontend:build": "cd frontend && bun run build",
     "frontend:install": "cd frontend && bun install -f --no-cache"

@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Video Script Runner",
+  "description": "Runs a script on all YouTube video pages",
+  "version": "1.0",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "webRequest",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
+  ],
+  "host_permissions": ["https://www.youtube.com/watch*"],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules_1.json"
+      }
+    ]
+  },
+  "action": {
+    "default_popup": "hello.html",
+    "default_icon": "hello_extensions.png"
+  }
+}

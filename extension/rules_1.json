@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "regexSubstitution": "https://api.yt-to-quiz.localhost/api/timedtext\\1"
+      }
+    },
+    "condition": {
+      "regexFilter": "^https://www\\.youtube\\.com/api/timedtext(.*)",
+      "resourceTypes": ["xmlhttprequest"]
+    }
+  }
+]
